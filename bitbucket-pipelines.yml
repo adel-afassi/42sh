@@ -1,0 +1,9 @@
+image: antoinebaudrand/blinux
+
+pipelines:
+  default:
+    - step:
+        script:
+          - make norm
+          - make
+          - make test

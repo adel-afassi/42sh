@@ -1,0 +1,529 @@
+[1]
+NAME="Nothing"
+SETUP="export TERM=xterm ; PATH='/bin:/usr/bin'"
+CLEAN=""
+TESTS=
+  echo ''
+[1-END]
+
+[2]
+NAME="Exec two command"
+SETUP="export TERM=xterm ; PATH='/bin:/usr/bin'"
+CLEAN=""
+TESTS=
+  echo 'ls /bin'
+  echo 'cat /etc/resolv.conf'
+[2-END]
+
+[3]
+NAME="Testing with /usr/bin PATH"
+SETUP="export TERM=xterm ; PATH='/usr/bin'"
+CLEAN=""
+TESTS=
+  echo 'pwd'
+[3-END]
+
+[4]
+NAME="Testing with /bin PATH"
+SETUP="export TERM=xterm ; PATH='/bin'"
+CLEAN=""
+TESTS=
+  echo 'pwd'
+[4-END]
+
+[5]
+NAME="run commands"
+SETUP="export TERM=xterm ; PATH='/bin:/usr/bin'"
+CLEAN=""
+TESTS=
+  echo 'cat /etc/resolv.conf'
+  sleep 0.5
+  echo 'ls -l /bin'
+  sleep 0.5
+  echo 'pwd'
+[5-END]
+
+[6]
+NAME="setenv and unsetenv"
+SETUP="/usr/bin/env > .lstenv ; while read varenv ; do unset $varenv ; done < <(/bin/cat .lstenv | /usr/bin/cut -f1 -d=) ; export PATH=/bin:/usr/bin ; export _=ls ; export LS_COLORS=RID ; export MYBG=4 ; export LVL=4 ; export NOTE=2"
+CLEAN="while read varenv ; do export "$varenv" 2>/dev/null ; done  < <(/bin/cat .lstenv) ; /bin/rm -f .lstenv"
+TESTS=
+  echo 'unsetenv HOSTTYPE'
+  echo 'unsetenv VENDOR'
+  echo 'unsetenv OSTYPE'
+  echo 'unsetenv MACHTYPE'
+  echo 'unsetenv SHLVL'
+  echo 'unsetenv PWD'
+  echo 'unsetenv LOGNAME'
+  echo 'unsetenv USER'
+  echo 'unsetenv GROUP'
+  echo 'unsetenv HOST'
+  echo 'unsetenv REMOTEHOST'
+  echo 'unsetenv _'
+  echo 'unsetenv LS_COLORS'
+  echo 'unsetenv NOTE'
+  echo 'setenv titi'
+  echo 'setenv tata coucou'
+  echo 'env'
+  echo '/usr/bin/env'
+  echo 'setenv var1 val1'
+  echo 'setenv var2 val2'
+[6-END]
+
+[7]
+NAME="builtin cd"
+SETUP="export TERM=xterm ; PATH='/bin:/usr/bin'"
+CLEAN=""
+TESTS=
+  echo 'cd ..'
+  echo 'ls -l'
+  echo 'cd /usr'
+  echo 'ls -l'
+[7-END]
+
+[8]
+NAME="many tab and space"
+SETUP="export TERM=xterm ; PATH='/bin:/usr/bin'"
+CLEAN=""
+TESTS=
+  echo -e "\t\t    ls\t     \t-l    \t\t  \t -a /usr   \t\t"
+[8-END]
+
+[9]
+NAME="Launch DivZero program with core dump"
+SETUP="export TERM=xterm ; PATH='/bin:/usr/bin'"
+CLEAN=""
+TESTS=
+  echo "./my_divzero"
+[9-END]
+
+[10]
+NAME="Launch SegFault program without core dump"
+SETUP="ulimit -c 0 ; export TERM=xterm ; PATH='/bin:/usr/bin'"
+CLEAN=""
+TESTS=
+  echo "./my_segfault"
+[10-END]
+
+[11]
+NAME="Testing simple pipe"
+SETUP="export TERM=xterm ; PATH='/bin:/usr/bin'"
+CLEAN=""
+TESTS=
+  echo "ls -l /bin | grep sh"
+[11-END]
+
+[12]
+NAME="A pipe with a builtin ?"
+SETUP="export VAR1=VALEUR1 ; OLDPATH=$PATH ; PATH='/random'"
+CLEAN="PATH=$OLDPATH"
+TESTS=
+  echo 'setenv | /bin/grep VAR1'
+  echo '/bin/ls | cd /usr'
+  echo 'ls -l'
+  echo 'exit 45|cat /etc/resolv.conf'
+[12-END]
+
+[13]
+NAME="Testing pipes with ping"
+SETUP="export TERM=xterm ; PATH='/bin:/usr/bin'"
+CLEAN=""
+TESTS=
+  echo "ping google.fr | head -2 | cut -c 1 | cat"
+[13-END]
+
+[14]
+NAME="Testing pipes with man gcc"
+SETUP="export TERM=xterm ; PATH='/bin:/usr/bin'"
+CLEAN=""
+TESTS=
+  echo "man gcc | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e"
+[14-END]
+
+[20]
+NAME="Testing invalid null command"
+SETUP="export TERM=xterm ; PATH='/bin:/usr/bin'"
+CLEAN=""
+TESTS=
+  echo "|�|"
+[20-END]
+
+[21]
+NAME="Testing invalid null command 2"
+SETUP="export TERM=xterm ; PATH='/bin:/usr/bin'"
+CLEAN=""
+TESTS=
+  echo "|"
+[21-END]
+
+[22]
+NAME="Testing invalid null command 3"
+SETUP="export TERM=xterm ; PATH='/bin:/usr/bin'"
+CLEAN=""
+TESTS=
+  echo "| ls | "
+[22-END]
+
+[23]
+NAME="OLDPWD"
+SETUP="export TERM=xterm ; PATH='/bin:/usr/bin'"
+CLEAN=""
+TESTS=
+  echo "cd .."
+  echo "cd .."
+  echo "env | grep OLDPWD"
+[23-END]
+
+[24]
+NAME="Rm non-existent file"
+SETUP="export TERM=xterm ; PATH='/bin:/usr/bin'"
+CLEAN=""
+TESTS=
+  echo "rm tutututututuu"
+[24-END]
+
+[25]
+NAME="Testing pipes with ls"
+SETUP="export TERM=xterm ; PATH='/bin:/usr/bin'"
+CLEAN=""
+TESTS=
+  echo "ls | wc -l"
+[25-END]
+
+[26]
+NAME="Testing pipes with nothing"
+SETUP="export TERM=xterm ; PATH='/bin:/usr/bin'"
+CLEAN=""
+TESTS=
+  echo "| ls"
+[26-END]
+
+[27]
+NAME="Testing echo"
+SETUP="export TERM=xterm ; PATH='/bin:/usr/bin'"
+CLEAN=""
+TESTS=
+  echo "echo  42sh"
+[27-END]
+
+[28]
+NAME="Simple echo"
+SETUP="export TERM=xterm ; PATH=''"
+CLEAN=""
+TESTS=
+  echo "echo salut"
+[28-END]
+
+[29]
+NAME="Simple echo 2"
+SETUP="export TERM=xterm ; PATH=''"
+CLEAN=""
+TESTS=
+  echo "salut cest moi le mec qui ecrit plusieurs mots"
+[29-END]
+
+[30]
+NAME="Echo with redirections"
+SETUP="export TERM=xterm ; PATH=''"
+CLEAN=""
+TESTS=
+  echo "echo salut la mifa >> test2"
+  echo "cat -e test2"
+  echo "rm test2"
+[30-END]
+
+[31]
+NAME="Echo with pipes"
+SETUP="export TERM=xterm ; PATH=''"
+CLEAN=""
+TESTS=
+  echo "echo salam la mifa cest wartek | wc | cat -e"
+[31-END]
+
+[32]
+NAME="Empty echo - Echo -n"
+SETUP="export TERM=xterm ; PATH=''"
+CLEAN=""
+TESTS=
+  echo "echo"
+  echo "echo -n"
+  echo "echo -n salam alikoum"
+  echo "echo -n pani pwoblem"
+  echo "echo -n ves pou pwotege la vi"
+  echo "echo sé nou ki pli fô"
+  echo "echo -n -n -n -noapoj"
+  echo "echo -naojd salu"
+[32-END]
+
+[33]
+NAME="redirecting"
+SETUP="export TERM=xterm ; PATH=''"
+CLEAN=""
+TESTS=
+  echo "pwd > src"
+[33-END]
+
+[34]
+NAME="redirecting and pipe"
+SETUP="export TERM=xterm ; PATH=''"
+CLEAN=""
+TESTS=
+  echo "ls | wc -l > test"
+  echo "cat test"
+  echo "cat < test | wc -c"
+  echo "rm test"
+[34-END]
+
+[35]
+NAME="error cat file"
+SETUP="export TERM=xterm ; PATH=''"
+CLEAN=""
+TESTS=
+  echo "cat man_42sh"
+[35-END]
+
+[36]
+NAME="testing double pipe"
+SETUP="export TERM=xterm ; PATH=''"
+CLEAN=""
+TESTS=
+  echo "ls | less | wc -c"
+[36-END]
+
+[37]
+NAME="testing invalid command"
+SETUP="export TERM=xterm ; PATH=''"
+CLEAN=""
+TESTS=
+  echo "lqf"
+[37-END]
+
+[38]
+NAME="testing invalid command"
+SETUP="export TERM=xterm ; PATH=''"
+CLEAN=""
+TESTS=
+  echo "cleazr"
+[38-END]
+
+[39]
+NAME="History builtin simple"
+SETUP="export TERM=xterm ; PATH=''"
+CLEAN=""
+TESTS=
+  echo "ls"
+  echo "cd"
+  echo "ls"
+  echo "history | awk '{print $1;}'"
+[39-END]
+
+[40]
+NAME="Cd go back with -"
+SETUP="export TERM=xterm ; PATH=''"
+CLEAN=""
+TESTS=
+  echo "cd /"
+  echo "cd /tmp"
+  echo "cd -"
+  echo "pwd"
+  echo "cd -"
+  echo "pwd"
+[40-END]
+
+[41]
+NAME="Cd go home with --"
+SETUP="export TERM=xterm ; PATH=''"
+CLEAN=""
+TESTS=
+  echo "cd /"
+  echo "cd --"
+  echo "pwd"
+[41-END]
+
+[42]
+NAME="Simple test (which)"
+SETUP="export TERM=xterm ; PATH=''"
+CLEAN=""
+TESTS=
+  echo "which"
+  echo "which				"
+  echo "whichh"
+  echo "which which"
+  echo "which ls /bin/ls cd setenv unsetenv env echo exit kill cat"
+[42-END]
+
+[43]
+NAME="Simple test (which) -bad"
+SETUP="export TERM=xterm ; PATH=''"
+CLEAN=""
+TESTS=
+  echo "which oajfozej /toz/fake /bin/lss qs qq jeremy"
+  echo "which whichc lss catt toz 20 pwdd toppp /bin/nope"
+[43-END]
+
+[44]
+NAME="Test kill which not functions (SEGUI - 0)"
+SETUP="export TERM=xterm ; PATH=''"
+CLEAN=""
+TESTS=
+  echo "kill -SEGIU 9891"
+[44-END]
+
+[45]
+NAME="Test non functional kill - 2 (SEGV - ouoi)"
+SETUP="export TERM=xterm ; PATH=''"
+CLEAN=""
+TESTS=
+  echo "kill -SEGV ouoi"
+[45-END]
+
+[46]
+NAME="Invalid null command with &&"
+SETUP="export TERM=xterm ; PATH=''"
+CLEAN=""
+TESTS=
+  echo "ls &&"
+[46-END]
+
+[47]
+NAME="Line with &&"
+SETUP="export TERM=xterm ; PATH=''"
+CLEAN=""
+TESTS=
+  echo "cat izi && ls"
+[47-END]
+
+[48]
+NAME="Line with many &&"
+SETUP="export TERM=xterm ; PATH=''"
+CLEAN=""
+TESTS=
+  echo "cat izi && cat izi && ls && echo lol && echo kalash && cat eez && echo izi"
+[48-END]
+
+[49]
+NAME="Invalid null command with ||"
+SETUP="export TERM=xterm ; PATH=''"
+CLEAN=""
+TESTS=
+  echo "echo izi ||"
+[49-END]
+
+[50]
+NAME="Line with ||"
+SETUP="export TERM=xterm ; PATH=''"
+CLEAN=""
+TESTS=
+  echo "cat izi || ls"
+[50-END]
+
+[51]
+NAME="Line with many ||"
+SETUP="export TERM=xterm ; PATH=''"
+CLEAN=""
+TESTS=
+  echo "cat izi || cat izi || ls || echo lol || echo kalash || cat eez || echo izi"
+[51-END]
+
+[52]
+NAME="Mixed ; && || (1)"
+SETUP="export TERM=xterm ; PATH=''"
+CLEAN=""
+TESTS=
+  echo "cat izi && ls / ; echo lol || ls / ; echo test && cat existepas || echo ok ; echo la"
+[52-END]
+
+[53]
+NAME="Mixed ; && || (2)"
+SETUP="export TERM=xterm ; PATH=''"
+CLEAN=""
+TESTS=
+  echo "cat izi || ls / ; echo lol && ls /||   echo test ; cat existepas &&   echo      ok || echo la ;"
+[53-END]
+
+[54]
+NAME="Mixed ; && || and pipes (1)"
+SETUP="export TERM=xterm ; PATH=''"
+CLEAN=""
+TESTS=
+  echo "cd ; </etc/hosts od -c | grep xx | wc >> /tmp/z -l ; cd - && echo OK"
+[54-END]
+
+[55]
+NAME="Mixed ; && || and pipes (2)"
+SETUP="export TERM=xterm ; PATH=''"
+CLEAN=""
+TESTS=
+  echo "cd ; ls > /tmp/outtmp && cat /tmp/outtmp ; cat existepas || echo ok && ls > ici ; cat ezze || cat ici > /tmp/outtest ; cat /tmp/outtest | head -2"
+[55-END]
+
+[56]
+NAME="simple test &&"
+SETUP="export TERM=xterm ; PATH=''"
+CLEAN=""
+TESTS=
+  echo "ls && badcommad && echo ne_doit_pas_safficher"
+[56-END]
+
+[57]
+NAME="simple test && 2"
+SETUP="export TERM=xterm ; PATH=''"
+CLEAN=""
+TESTS=
+  echo "cd /root && echo ayin pa pou matjé"
+[57-END]
+
+[58]
+NAME="simple test && et ||"
+SETUP="export TERM=xterm ; PATH=''"
+CLEAN=""
+TESTS=
+  echo "vbadvbadbad && ls || echo sa bon y good"
+[58-END]
+
+[59]
+NAME="simple test && || 2"
+SETUP="export TERM=xterm ; PATH=''"
+CLEAN=""
+TESTS=
+  echo "badcommand || echo kow && echo doit_safficher"
+[59-END]
+
+[60]
+NAME="redirection and |"
+SETUP="export TERM=xterm ; PATH=''"
+CLEAN=""
+TESTS=
+  echo "echo coucou >test; < test ls | cat -e| wc -c >> test && >> test echo success ;cat test"
+  echo "rm test"
+[60-END]
+
+[61]
+NAME="ls without env"
+SETUP="export TERM=xterm ; PATH='' ; unset PATH"
+CLEAN=""
+TESTS=
+  echo 'ls'
+[61-END]
+
+[62]
+NAME="basic test where"
+SETUP="export TERM=xterm ; PATH=''"
+CLEAN=""
+TESTS=
+  echo 'where'
+  echo 'where echo'
+  echo 'where cd echo'
+  echo 'where where cd echo'
+[62-END]
+
+[63]
+NAME="where error handling"
+SETUP="export TERM=xterm ; PATH=''"
+CLEAN=""
+TESTS=
+  echo 'where toz fake'
+  echo 'where where'
+  echo 'where out se'
+  echo 'where je sais pas'
+[63-END]
